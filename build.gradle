@@ -1,0 +1,48 @@
+// 오류날 경우 gradle 버전 탓일 가능성이 큼. gradle/wrapper.gradle-wrapper.properties 를 4.10.3 버전으로 바꿔보자.
+buildscript {
+    // ext : 전역 변수를 설정하겠다. 여기서는 springBOotVersion 전역변수를 생성하고, 그 값을 2.1.7.RELEASE로 하겠다는 의미
+    ext{
+        springBootVersion= '2.1.7.RELEASE'
+    }
+    // 의존성(라이브러리)둘울 어떤 원격저장소에서 받을지 정함.
+    repositories {
+        mavenCentral()
+        // 보안 이슈로 인해 allowInsecureProtocol 을 true로 설정.
+        maven {
+            url "https://plugins.gradle.org/m2/"
+            allowInsecureProtocol true
+        }
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+// 밑의 4줄은 자바와 spring boot를사용하기 위한 필수 플러그인들.
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management' // spirng boot의 의존성 관리
+
+group 'com.jojoIdu.book'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+// implementation이 아닐 수도 있음. (gradle 7.0 버전 밑에서는 compile)
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+
+//dependencies {
+//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+//}
+//test {
+//    useJUnitPlatform()
+//}
